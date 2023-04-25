@@ -110,6 +110,16 @@
 
 (setq visible-bell 1)
 
+;; (set-fontset-font
+;;  t
+;;  '(#x1f300 . #x1fad0)
+;;  (cond
+;;   ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
+;;   ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
+;;   ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
+;;   ((member "Symbola" (font-family-list)) "Symbola")
+;;  ))
+
 (use-package spacemacs-theme
   :ensure t
   :defer t
@@ -246,7 +256,7 @@
 (use-package org-roam
   :ensure t
   :custom
-  (org-roam-directory (file-truename "~/Dropbox/roamnodes/"))
+  (org-roam-directory (file-truename "~/.emacs.d/roamnodes/"))
   :bind (("C-c n l" . org-roam-buffer-toggle)
 	 ("C-c n f" . org-roam-node-find)
 	 ("C-c n g" . org-roam-graph)

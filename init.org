@@ -138,6 +138,19 @@
   (setq visible-bell 1)
 #+end_src
 
+#+begin_src elisp
+  ;; (set-fontset-font
+  ;;  t
+  ;;  '(#x1f300 . #x1fad0)
+  ;;  (cond
+  ;;   ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
+  ;;   ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
+  ;;   ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
+  ;;   ((member "Symbola" (font-family-list)) "Symbola")
+  ;;  ))
+
+
+#+end_src
 * themes
 #+begin_src elisp
   (use-package spacemacs-theme
