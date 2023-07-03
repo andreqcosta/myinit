@@ -271,9 +271,6 @@
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 
-(use-package vterm
-  :ensure t)
-
 (defun efs/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
@@ -344,7 +341,10 @@
   :bind (:map vterm-mode-map
 	      ("C-o" . other-window)))
 
-(defun my-split-window-below (&optional arg)
+(use-package multi-vterm
+  :ensure t)
+
+(defun mvterm-below (&optional arg)
   "Split the current window 70/30 rather than 50/50.
 A single-digit prefix argument gives the top window arg*10%."
   (interactive "P")
@@ -352,18 +352,23 @@ A single-digit prefix argument gives the top window arg*10%."
 
     (split-window-below (round (* proportion (window-height)))))
   (other-window 1)
-  (vterm))
-(global-set-key (kbd "C-c v") 'my-split-window-below)
-(global-set-key (kbd "C-c t") 'vterm)
-(global-set-key (kbd "C-o") 'other-window)
+  (multi-vterm))
+(global-set-key (kbd "C-c v") 'mvterm-below)
+(global-set-key (kbd "C-c t") 'multi-vterm)
 
-(defun vvterm ()
+
+(defun mvterm-left ()
   (interactive)
   (split-window-right)
   (other-window 1)
-  (vterm))
+  (multi-vterm))
 
-(global-set-key (kbd "C-c b") 'vvterm)
+(global-set-key (kbd "C-c b") 'mvterm-left)
+
+(global-set-key (kbd "C-c j") 'multi-vterm-next)
+(global-set-key (kbd "C-c k") 'multi-vterm-prev)
+
+(global-set-key (kbd "C-o") 'other-window)
 
 (defun enter-above ()
   (interactive)

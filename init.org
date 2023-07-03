@@ -318,12 +318,6 @@
     (require 'org-roam-protocol))
 #+end_src
 
-* vterm
-#+begin_src elisp
-  (use-package vterm
-    :ensure t)
-#+end_src
-
 * lsp-mpde
 #+begin_src elisp
   (defun efs/lsp-mode-setup ()
@@ -413,10 +407,13 @@
     :ensure t
     :bind (:map vterm-mode-map
 		("C-o" . other-window)))
+
+  (use-package multi-vterm
+    :ensure t) 
 #+end_src
-* keybindg
+
 #+begin_src elisp
-  (defun my-split-window-below (&optional arg)
+  (defun mvterm-below (&optional arg)
     "Split the current window 70/30 rather than 50/50.
   A single-digit prefix argument gives the top window arg*10%."
     (interactive "P")
@@ -424,25 +421,28 @@
 
       (split-window-below (round (* proportion (window-height)))))
     (other-window 1)
-    (vterm))
-  (global-set-key (kbd "C-c v") 'my-split-window-below)
-  (global-set-key (kbd "C-c t") 'vterm)
-  (global-set-key (kbd "C-o") 'other-window)
-#+end_src
+    (multi-vterm))
+  (global-set-key (kbd "C-c v") 'mvterm-below)
+  (global-set-key (kbd "C-c t") 'multi-vterm)
 
-#+begin_src elisp
-  (defun vvterm ()
+
+  (defun mvterm-left ()
     (interactive)
     (split-window-right)
     (other-window 1)
-    (vterm))
+    (multi-vterm))
 
-  (global-set-key (kbd "C-c b") 'vvterm)
+  (global-set-key (kbd "C-c b") 'mvterm-left)
 
-
+  (global-set-key (kbd "C-c j") 'multi-vterm-next)
+  (global-set-key (kbd "C-c k") 'multi-vterm-prev)
 #+end_src
 
+* keybindg
+
 #+begin_src elisp
+  (global-set-key (kbd "C-o") 'other-window)
+
   (defun enter-above ()
     (interactive)
     (previous-line)
