@@ -513,3 +513,9 @@
 #+end_src
 
 
+
+
+#+begin_src  elisp
+  (setq kill-buffer-query-functions nil)
+
+#+end_src
