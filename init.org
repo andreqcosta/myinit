@@ -123,6 +123,10 @@
 #+end_src
 
 * emacs
+#+begin_src elisp
+  (functionp 'module-load)
+
+#+end_src
 # relative line number
 #+begin_src elisp  
   (setq display-line-numbers-type 'relative) 
@@ -167,11 +171,6 @@
   (setq initial-scratch-message nil)
 
   (setq inhibit-startup-message t)
-
-
-
-
-
 
   (use-package page-break-lines
     :ensure t)
@@ -318,55 +317,55 @@
     (require 'org-roam-protocol))
 #+end_src
 
-#* lsp-mpde
+* lsp-mpde
 #+begin_src elisp
-  (defun efs/lsp-mode-setup ()
-    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-    (lsp-headerline-breadcrumb-mode))
+  ;; (defun efs/lsp-mode-setup ()
+  ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  ;;   (lsp-headerline-breadcrumb-mode))
 
-  (use-package lsp-mode
-    :ensure t
-    :commands (lsp lsp-deferred)
-    :hook ((lsp-mode . efs/lsp-mode-setup)
-	   (ruby-mode . lsp-deferred))
-    :init
-    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-    :config
-    (lsp-enable-which-key-integration t))
+  ;; (use-package lsp-mode
+  ;;   :ensure t
+  ;;   :commands (lsp lsp-deferred)
+  ;;   :hook ((lsp-mode . efs/lsp-mode-setup)
+  ;; 	 (ruby-mode . lsp-deferred))
+  ;;   :init
+  ;;   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+  ;;   :config
+  ;;   (lsp-enable-which-key-integration t))
 
-  (use-package lsp-ui
-    :ensure t
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    (lsp-ui-doc-position 'bottom))
+  ;; (use-package lsp-ui
+  ;;   :ensure t
+  ;;   :hook (lsp-mode . lsp-ui-mode)
+  ;;   :custom
+  ;;   (lsp-ui-doc-position 'bottom))
 
-  (use-package lsp-treemacs
-    :ensure t
-    :after lsp)
+  ;; (use-package lsp-treemacs
+  ;;   :ensure t
+  ;;   :after lsp)
 
-  (use-package company
-    :ensure t
-    :after lsp-mode
-    :hook (lsp-mode . company-mode)
-    :bind (:map company-active-map
-		("<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-	  ("<tab>" . company-indent-or-complete-common))
-    :custom
-    (company-minimum-prefix-length 1)
-    (company-idle-delay 0.0))
+  ;; (use-package company
+  ;;   :ensure t
+  ;;   :after lsp-mode
+  ;;   :hook (lsp-mode . company-mode)
+  ;;   :bind (:map company-active-map
+  ;; 	      ("<tab>" . company-complete-selection))
+  ;;   (:map lsp-mode-map
+  ;; 	("<tab>" . company-indent-or-complete-common))
+  ;;   :custom
+  ;;   (company-minimum-prefix-length 1)
+  ;;   (company-idle-delay 0.0))
 
-  (use-package company-box
-    :ensure t
-    :hook (company-mode . company-box-mode))
+  ;; (use-package company-box
+  ;;   :ensure t
+  ;;   :hook (company-mode . company-box-mode))
 
 #+end_src
 
 * flycheck
 #+begin_src elisp
-  (use-package flycheck
-    :ensure t
-    :init (global-flycheck-mode))
+  ;; (use-package flycheck
+  ;;   :ensure t
+  ;;   :init (global-flycheck-mode))
 #+end_src
 
 * which-key
@@ -406,10 +405,12 @@
   (use-package vterm
     :ensure t
     :bind (:map vterm-mode-map
-		("C-o" . other-window)))
+		("C-o" . other-window))
+    :init
+    (setq vterm-buffer-name-string "vterm %s"))
 
-  (use-package multi-vterm
-    :ensure t) 
+  ;; (use-package multi-vterm
+  ;;   :ensure t) 
 #+end_src
 
 #+begin_src elisp
@@ -421,19 +422,18 @@
 
       (split-window-below (round (* proportion (window-height)))))
     (other-window 1)
-    (multi-vterm))
+    (vterm))
   (global-set-key (kbd "C-c v") 'mvterm-below)
-  (global-set-key (kbd "C-c t") 'multi-vterm)
+  (global-set-key (kbd "C-c t") 'vterm)
 
 
   (defun mvterm-left ()
     (interactive)
     (split-window-right)
     (other-window 1)
-    (multi-vterm))
+    (vterm))
 
   (global-set-key (kbd "C-c b") 'mvterm-left)
-
   (global-set-key (kbd "C-c j") 'multi-vterm-next)
   (global-set-key (kbd "C-c k") 'multi-vterm-prev)
 #+end_src
@@ -499,6 +499,7 @@
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+  (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
 #+end_src
 * undo-tree
 #+begin_src elisp
@@ -517,5 +518,37 @@
 
 #+begin_src  elisp
   (setq kill-buffer-query-functions nil)
+
+#+end_src
+
+
+* treesitter
+#+begin_src elisp
+  (use-package tree-sitter
+    :ensure t)
+
+  (use-package tree-sitter-langs
+    :ensure t)
+
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+#+end_src
+
+* eglot
+#+begin_src elisp
+
+
+  (use-package eglot
+    :hook (python-mode . eglot-ensure))
+
+  ;; ;;-------------------------------------------------
+
+  ;; (use-package company
+  ;;   :defer t
+  ;;   :hook (python-mode . company-mode))
+
+  ;; ;;-------------------------------------------------
+  (add-hook 'after-init-hook 'global-company-mode)
 
 #+end_src

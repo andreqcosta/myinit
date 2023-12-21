@@ -102,6 +102,8 @@
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
+(functionp 'module-load)
+
 (setq display-line-numbers-type 'relative) 
 (global-display-line-numbers-mode)
 
@@ -131,11 +133,6 @@
 (setq initial-scratch-message nil)
 
 (setq inhibit-startup-message t)
-
-
-
-
-
 
 (use-package page-break-lines
   :ensure t)
@@ -271,49 +268,49 @@
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 
-(defun efs/lsp-mode-setup ()
-  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
+;; (defun efs/lsp-mode-setup ()
+;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+;;   (lsp-headerline-breadcrumb-mode))
 
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook ((lsp-mode . efs/lsp-mode-setup)
-	 (ruby-mode . lsp-deferred))
-  :init
-  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  :config
-  (lsp-enable-which-key-integration t))
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :commands (lsp lsp-deferred)
+;;   :hook ((lsp-mode . efs/lsp-mode-setup)
+;; 	 (ruby-mode . lsp-deferred))
+;;   :init
+;;   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+;;   :config
+;;   (lsp-enable-which-key-integration t))
 
-(use-package lsp-ui
-  :ensure t
-  :hook (lsp-mode . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'bottom))
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :hook (lsp-mode . lsp-ui-mode)
+;;   :custom
+;;   (lsp-ui-doc-position 'bottom))
 
-(use-package lsp-treemacs
-  :ensure t
-  :after lsp)
+;; (use-package lsp-treemacs
+;;   :ensure t
+;;   :after lsp)
 
-(use-package company
-  :ensure t
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :bind (:map company-active-map
-	      ("<tab>" . company-complete-selection))
-  (:map lsp-mode-map
-	("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
+;; (use-package company
+;;   :ensure t
+;;   :after lsp-mode
+;;   :hook (lsp-mode . company-mode)
+;;   :bind (:map company-active-map
+;; 	      ("<tab>" . company-complete-selection))
+;;   (:map lsp-mode-map
+;; 	("<tab>" . company-indent-or-complete-common))
+;;   :custom
+;;   (company-minimum-prefix-length 1)
+;;   (company-idle-delay 0.0))
 
-(use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
+;; (use-package company-box
+;;   :ensure t
+;;   :hook (company-mode . company-box-mode))
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+;; (use-package flycheck
+;;   :ensure t
+;;   :init (global-flycheck-mode))
 
 (use-package which-key
   :ensure t
@@ -339,10 +336,12 @@
 (use-package vterm
   :ensure t
   :bind (:map vterm-mode-map
-	      ("C-o" . other-window)))
+	      ("C-o" . other-window))
+  :init
+  (setq vterm-buffer-name-string "vterm %s"))
 
-(use-package multi-vterm
-  :ensure t)
+;; (use-package multi-vterm
+;;   :ensure t)
 
 (defun mvterm-below (&optional arg)
   "Split the current window 70/30 rather than 50/50.
@@ -352,21 +351,22 @@ A single-digit prefix argument gives the top window arg*10%."
 
     (split-window-below (round (* proportion (window-height)))))
   (other-window 1)
-  (multi-vterm))
+  (vterm))
 (global-set-key (kbd "C-c v") 'mvterm-below)
-(global-set-key (kbd "C-c t") 'multi-vterm)
+(global-set-key (kbd "C-c t") 'vterm)
 
 
 (defun mvterm-left ()
   (interactive)
   (split-window-right)
   (other-window 1)
-  (multi-vterm))
+  (vterm))
 
 (global-set-key (kbd "C-c b") 'mvterm-left)
-
 (global-set-key (kbd "C-c j") 'multi-vterm-next)
 (global-set-key (kbd "C-c k") 'multi-vterm-prev)
+
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 
 (global-set-key (kbd "C-o") 'other-window)
 
@@ -411,6 +411,7 @@ A single-digit prefix argument gives the top window arg*10%."
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(setq web-mode-engines-alist '(("django" . "\\.html\\'")))
 
 (use-package undo-tree
   :ensure t
@@ -420,3 +421,26 @@ A single-digit prefix argument gives the top window arg*10%."
 
 ;; Prevent undo tree files from polluting your git repo
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+(setq kill-buffer-query-functions nil)
+
+(use-package tree-sitter
+  :ensure t)
+
+(use-package tree-sitter-langs
+  :ensure t)
+
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+(use-package eglot
+  :hook (python-mode . eglot-ensure))
+
+;; ;;-------------------------------------------------
+
+;; (use-package company
+;;   :defer t
+;;   :hook (python-mode . company-mode))
+
+;; ;;-------------------------------------------------
+(add-hook 'after-init-hook 'global-company-mode)
