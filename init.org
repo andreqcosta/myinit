@@ -125,7 +125,7 @@
 * emacs
 #+begin_src elisp
   (functionp 'module-load)
-
+  (set-face-attribute 'default nil :height 200)
 #+end_src
 # relative line number
 #+begin_src elisp  
