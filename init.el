@@ -102,7 +102,16 @@
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
+(dolist (mode '(org-mode-hook
+		term-mode-hook
+		vterm-mode-hook
+		shell-mode-hook
+		treemacs-mode-hook
+		eshell-mode-hook))
+  (add-hook mode (lambda() (display-line-numbers-mode 0))))
+
 (functionp 'module-load)
+(set-face-attribute 'default nil :height 140)
 
 (setq display-line-numbers-type 'relative) 
 (global-display-line-numbers-mode)
@@ -122,32 +131,38 @@
 ;;   ((member "Symbola" (font-family-list)) "Symbola")
 ;;  ))
 
-(use-package spacemacs-theme
+;; (use-package spacemacs-theme
+;; :ensure t
+;; :defer t
+;; :init
+;; (load-theme 'spacemacs-dark t))
+
+(use-package zenburn-theme
   :ensure t
   :defer t
   :init
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'zenburn t))
 
 (setq inhibit-startup-screen t)
 
-(setq initial-scratch-message nil)
+;; (setq initial-scratch-message nil)
 
 (setq inhibit-startup-message t)
 
-(use-package page-break-lines
-  :ensure t)
-(use-package all-the-icons
-  :ensure t)
-(use-package dashboard
-  :ensure t
-  :config
-  (setq show-week-agenda-p t)
-  (setq dashboard-items '((recents . 15) (agenda . 5)))
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-startup-banner 3)
-  (dashboard-setup-startup-hook)
-  )
+;; (use-package page-break-lines
+;;   :ensure t)
+;; (use-package all-the-icons
+;;   :ensure t)
+;; (use-package dashboard
+;;   :ensure t
+;;   :config
+;;   (setq show-week-agenda-p t)
+;;   (setq dashboard-items '((recents . 15) (agenda . 5)))
+;;   (setq dashboard-set-heading-icons t)
+;;   (setq dashboard-set-file-icons t)
+;;   (setq dashboard-startup-banner 3)
+;;   (dashboard-setup-startup-hook)
+;;   )
 
 (use-package magit
   :ensure t)
@@ -267,6 +282,15 @@
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
+
+(use-package company
+  :ensure t
+  :bind (:map company-active-map
+	      ("<tab>" . company-complete-selection))
+
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
 
 ;; (defun efs/lsp-mode-setup ()
 ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -444,3 +468,7 @@ A single-digit prefix argument gives the top window arg*10%."
 
 ;; ;;-------------------------------------------------
 (add-hook 'after-init-hook 'global-company-mode)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))

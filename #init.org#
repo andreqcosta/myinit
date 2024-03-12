@@ -124,18 +124,8 @@
 
 * emacs
 #+begin_src elisp
-  (dolist (mode '(org-mode-hook
-		  term-mode-hook
-		  vterm-mode-hook
-		  shell-mode-hook
-		  treemacs-mode-hook
-		  eshell-mode-hook))
-    (add-hook mode (lambda() (display-line-numbers-mode 0))))
-#+end_src
-
-#+begin_src elisp
   (functionp 'module-load)
-  (set-face-attribute 'default nil :height 140)
+  (set-face-attribute 'default nil :height 160)
 #+end_src
 # relative line number
 #+begin_src elisp  
@@ -167,41 +157,35 @@
 #+end_src
 * themes
 #+begin_src elisp
-  ;; (use-package spacemacs-theme
-  ;; :ensure t
-  ;; :defer t
-  ;; :init
-  ;; (load-theme 'spacemacs-dark t))
-
-  (use-package zenburn-theme
+  (use-package spacemacs-theme
     :ensure t
     :defer t
     :init
-    (load-theme 'zenburn t))
+    (load-theme 'spacemacs-dark t))
 #+end_src
 
 * start page
 #+begin_src elisp
   (setq inhibit-startup-screen t)
 
-  ;; (setq initial-scratch-message nil)
+  (setq initial-scratch-message nil)
 
   (setq inhibit-startup-message t)
 
-  ;; (use-package page-break-lines
-  ;;   :ensure t)
-  ;; (use-package all-the-icons
-  ;;   :ensure t)
-  ;; (use-package dashboard
-  ;;   :ensure t
-  ;;   :config
-  ;;   (setq show-week-agenda-p t)
-  ;;   (setq dashboard-items '((recents . 15) (agenda . 5)))
-  ;;   (setq dashboard-set-heading-icons t)
-  ;;   (setq dashboard-set-file-icons t)
-  ;;   (setq dashboard-startup-banner 3)
-  ;;   (dashboard-setup-startup-hook)
-  ;;   )
+  (use-package page-break-lines
+    :ensure t)
+  (use-package all-the-icons
+    :ensure t)
+  (use-package dashboard
+    :ensure t
+    :config
+    (setq show-week-agenda-p t)
+    (setq dashboard-items '((recents . 15) (agenda . 5)))
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-startup-banner 3)
+    (dashboard-setup-startup-hook)
+    )
 #+end_src
 
 * magit
@@ -339,7 +323,7 @@
     :ensure t
     :bind (:map company-active-map
 		("<tab>" . company-complete-selection))
-
+    
     :custom
     (company-minimum-prefix-length 1)
     (company-idle-delay 0.0))
@@ -579,10 +563,4 @@
   ;; ;;-------------------------------------------------
   (add-hook 'after-init-hook 'global-company-mode)
 
-#+end_src
-
-#+begin_src elisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((python . t)))
 #+end_src
