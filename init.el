@@ -102,6 +102,9 @@
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
+(setq-default left-margin-width 1 right-margin-width 1) ; Define new widths.
+(set-window-buffer nil (current-buffer))
+
 (dolist (mode '(org-mode-hook
 		term-mode-hook
 		vterm-mode-hook

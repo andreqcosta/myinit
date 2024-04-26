@@ -124,6 +124,15 @@
 
 * emacs
 #+begin_src elisp
+  (global-visual-line-mode t)
+#+end_src
+
+#+begin_src elisp
+  (setq-default left-margin-width 1 right-margin-width 1) ; Define new widths.
+  (set-window-buffer nil (current-buffer))
+#+end_src
+
+#+begin_src elisp
   (dolist (mode '(org-mode-hook
 		  term-mode-hook
 		  vterm-mode-hook
