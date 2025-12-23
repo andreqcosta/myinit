@@ -5,7 +5,7 @@
   ;; Package repositories
   (require 'package)
   (add-to-list 'package-archives
-	       '("melpa" . "http://melpa.org/packages/") t)
+  	     '("melpa" . "http://melpa.org/packages/") t)
   (package-initialize)
 
   (when (not package-archive-contents)
@@ -54,16 +54,16 @@
     ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
     (defun crm-indicator (args)
       (cons (format "[CRM%s] %s"
-		    (replace-regexp-in-string
-		     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-		     crm-separator)
-		    (car args))
-	    (cdr args)))
+  		  (replace-regexp-in-string
+  		   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+  		   crm-separator)
+  		  (car args))
+  	  (cdr args)))
     (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
     ;; Do not allow the cursor in the minibuffer prompt
     (setq minibuffer-prompt-properties
-	  '(read-only t cursor-intangible t face minibuffer-prompt))
+  	'(read-only t cursor-intangible t face minibuffer-prompt))
     (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
     ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
@@ -81,9 +81,9 @@
     :ensure nil
     ;; More convenient directory navigation commands
     :bind (:map vertico-map
-		("RET" . vertico-directory-enter)
-		("DEL" . vertico-directory-delete-char)
-		("M-DEL" . vertico-directory-delete-word))
+  	      ("RET" . vertico-directory-enter)
+  	      ("DEL" . vertico-directory-delete-char)
+  	      ("M-DEL" . vertico-directory-delete-word))
     ;; Tidy shadowed file names
     :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 #+end_src
@@ -99,8 +99,8 @@
     ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
     ;;       orderless-component-separator #'orderless-escapable-split-on-space)
     (setq completion-styles '(orderless basic)
-	  completion-category-defaults nil
-	  completion-category-overrides '((file (styles partial-completion)))))
+  	completion-category-defaults nil
+  	completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 
 * marginalia
@@ -111,8 +111,8 @@
     :ensure t
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
     :bind (("M-A" . marginalia-cycle)
-	   :map minibuffer-local-map
-	   ("M-A" . marginalia-cycle))
+  	 :map minibuffer-local-map
+  	 ("M-A" . marginalia-cycle))
 
     ;; The :init configuration is always executed (Not lazy!)
     :init
@@ -134,11 +134,11 @@
 
 #+begin_src elisp
   (dolist (mode '(org-mode-hook
-		  term-mode-hook
-		  vterm-mode-hook
-		  shell-mode-hook
-		  treemacs-mode-hook
-		  eshell-mode-hook))
+  		term-mode-hook
+  		vterm-mode-hook
+  		shell-mode-hook
+  		treemacs-mode-hook
+  		eshell-mode-hook))
     (add-hook mode (lambda() (display-line-numbers-mode 0))))
 #+end_src
 
@@ -161,6 +161,18 @@
 #+begin_src elisp
   (setq visible-bell 1)
 #+end_src
+
+#+begin_src elisp
+  (defun cp-line()
+    (interactive)
+    (beginning-of-line 1)
+    (set-mark-command nil)
+    (end-of-line 1)
+    (kill-ring-save (region-beginning) (region-end)))
+
+  (global-set-key (kbd "C-c w") 'cp-line)
+#+end_src
+
 
 * themes
 #+begin_src elisp
@@ -209,13 +221,12 @@
   (use-package magit-popup
     :ensure t)
 #+end_src
-
 * company
 #+begin_src elisp
   (use-package company
     :ensure t
     :bind (:map company-active-map
-		("<tab>" . company-complete-selection))
+  	      ("<tab>" . company-complete-selection))
 
     :custom
     (company-minimum-prefix-length 1)
@@ -245,7 +256,7 @@
   (use-package vterm
     :ensure t
     :bind (:map vterm-mode-map
-		("C-o" . other-window))
+  	      ("C-o" . other-window))
     :init
     (setq vterm-buffer-name-string "vterm %s"))
 
@@ -324,7 +335,7 @@
     :init
     (projectile-mode +1)
     :bind (:map projectile-mode-map
-		("C-c p" . projectile-command-map)))
+  	      ("C-c p" . projectile-command-map)))
 #+end_src
 
 * web-mode
