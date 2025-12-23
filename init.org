@@ -146,6 +146,7 @@
   (functionp 'module-load)
   (set-face-attribute 'default nil :height 140)
 #+end_src
+
 # relative line number
 #+begin_src elisp  
   (setq display-line-numbers-type 'relative) 
@@ -161,32 +162,19 @@
   (setq visible-bell 1)
 #+end_src
 
-#+begin_src elisp
-  ;; (set-fontset-font
-  ;;  t
-  ;;  '(#x1f300 . #x1fad0)
-  ;;  (cond
-  ;;   ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
-  ;;   ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
-  ;;   ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
-  ;;   ((member "Symbola" (font-family-list)) "Symbola")
-  ;;  ))
-
-
-#+end_src
 * themes
 #+begin_src elisp
-  ;; (use-package spacemacs-theme
-  ;; :ensure t
-  ;; :defer t
-  ;; :init
-  ;; (load-theme 'spacemacs-dark t))
-
-  (use-package zenburn-theme
+  (use-package spacemacs-theme
     :ensure t
     :defer t
     :init
-    (load-theme 'zenburn t))
+    (load-theme 'spacemacs-dark t))
+
+  ;; (use-package zenburn-theme
+  ;;   :ensure t
+  ;;   :defer t
+  ;;   :init
+  ;;   (load-theme 'zenburn t))
 #+end_src
 
 * start page
@@ -201,16 +189,16 @@
   ;;   :ensure t)
   ;; (use-package all-the-icons
   ;;   :ensure t)
-  ;; (use-package dashboard
-  ;;   :ensure t
-  ;;   :config
-  ;;   (setq show-week-agenda-p t)
-  ;;   (setq dashboard-items '((recents . 15) (agenda . 5)))
-  ;;   (setq dashboard-set-heading-icons t)
-  ;;   (setq dashboard-set-file-icons t)
-  ;;   (setq dashboard-startup-banner 3)
-  ;;   (dashboard-setup-startup-hook)
-  ;;   )
+  (use-package dashboard
+    :ensure t
+    :config
+    (setq show-week-agenda-p t)
+    (setq dashboard-items '((recents . 15) (agenda . 5)))
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
+    (setq dashboard-startup-banner 3)
+    (dashboard-setup-startup-hook)
+    )
 #+end_src
 
 * magit
@@ -220,126 +208,6 @@
     :ensure t)
   (use-package magit-popup
     :ensure t)
-#+end_src
-
-* treemacs
-#+begin_src elisp
-  (use-package treemacs
-    :ensure t
-    :defer t
-    :init
-    (with-eval-after-load 'winum
-      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
-    (progn
-      (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
-	    treemacs-deferred-git-apply-delay        0.5
-	    treemacs-directory-name-transformer      #'identity
-	    treemacs-display-in-side-window          t
-	    treemacs-eldoc-display                   'simple
-	    treemacs-file-event-delay                2000
-	    treemacs-file-extension-regex            treemacs-last-period-regex-value
-	    treemacs-file-follow-delay               0.2
-	    treemacs-file-name-transformer           #'identity
-	    treemacs-follow-after-init               t
-	    treemacs-expand-after-init               t
-	    treemacs-find-workspace-method           'find-for-file-or-pick-first
-	    treemacs-git-command-pipe                ""
-	    treemacs-goto-tag-strategy               'refetch-index
-	    treemacs-header-scroll-indicators        '(nil . "^^^^^^")
-	    treemacs-hide-dot-git-directory          t
-	    treemacs-indentation                     2
-	    treemacs-indentation-string              " "
-	    treemacs-is-never-other-window           nil
-	    treemacs-max-git-entries                 5000
-	    treemacs-missing-project-action          'ask
-	    treemacs-move-forward-on-expand          nil
-	    treemacs-no-png-images                   nil
-	    treemacs-no-delete-other-windows         t
-	    treemacs-project-follow-cleanup          nil
-	    treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-	    treemacs-position                        'left
-	    treemacs-read-string-input               'from-child-frame
-	    treemacs-recenter-distance               0.1
-	    treemacs-recenter-after-file-follow      nil
-	    treemacs-recenter-after-tag-follow       nil
-	    treemacs-recenter-after-project-jump     'always
-	    treemacs-recenter-after-project-expand   'on-distance
-	    treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
-	    treemacs-show-cursor                     nil
-	    treemacs-show-hidden-files               t
-	    treemacs-silent-filewatch                nil
-	    treemacs-silent-refresh                  nil
-	    treemacs-sorting                         'alphabetic-asc
-	    treemacs-select-when-already-in-treemacs 'move-back
-	    treemacs-space-between-root-nodes        t
-	    treemacs-tag-follow-cleanup              t
-	    treemacs-tag-follow-delay                1.5
-	    treemacs-text-scale                      nil
-	    treemacs-user-mode-line-format           nil
-	    treemacs-user-header-line-format         nil
-	    treemacs-wide-toggle-width               70
-	    treemacs-width                           35
-	    treemacs-width-increment                 1
-	    treemacs-width-is-initially-locked       t
-	    treemacs-workspace-switch-cleanup        nil)
-
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
-
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode 'always)
-      (when treemacs-python-executable
-	(treemacs-git-commit-diff-mode t))
-
-      (pcase (cons (not (null (executable-find "git")))
-		   (not (null treemacs-python-executable)))
-	(`(t . t)
-	 (treemacs-git-mode 'deferred))
-	(`(t . _)
-	 (treemacs-git-mode 'simple)))
-
-      (treemacs-hide-gitignored-files-mode nil))
-    :bind
-    (:map global-map
-	  ("M-0"       . treemacs-select-window)
-	  ("C-x t 1"   . treemacs-delete-other-windows)
-	  ("C-x t t"   . treemacs)
-	  ("C-x t d"   . treemacs-select-directory)
-	  ("C-x t B"   . treemacs-bookmark)
-	  ("C-x t C-t" . treemacs-find-file)
-	  ("C-x t M-t" . treemacs-find-tag)))
-
-  (use-package treemacs-icons-dired
-    :hook (dired-mode . treemacs-icons-dired-enable-once)
-    :ensure t)
-
-  (use-package treemacs-magit
-    :after (treemacs magit)
-    :ensure t)
-#+end_src
-
-* orgroam
-#+begin_src elisp
-  (use-package org-roam
-    :ensure t
-    :custom
-    (org-roam-directory (file-truename "~/.emacs.d/roamnodes/"))
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-	   ("C-c n f" . org-roam-node-find)
-	   ("C-c n g" . org-roam-graph)
-	   ("C-c n i" . org-roam-node-insert)
-	   ("C-c n c" . org-roam-capture)
-	   ;; Dailies
-	   ("C-c n j" . org-roam-dailies-capture-today))
-    :config
-    ;; If you're using a vertical completion framework, you might want a more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-    (org-roam-db-autosync-mode)
-    ;; If using org-roam-protocol
-    (require 'org-roam-protocol))
 #+end_src
 
 * company
@@ -352,57 +220,6 @@
     :custom
     (company-minimum-prefix-length 1)
     (company-idle-delay 0.0))
-#+end_src
-
-* lsp-mpde
-#+begin_src elisp
-  ;; (defun efs/lsp-mode-setup ()
-  ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  ;;   (lsp-headerline-breadcrumb-mode))
-
-  ;; (use-package lsp-mode
-  ;;   :ensure t
-  ;;   :commands (lsp lsp-deferred)
-  ;;   :hook ((lsp-mode . efs/lsp-mode-setup)
-  ;; 	 (ruby-mode . lsp-deferred))
-  ;;   :init
-  ;;   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  ;;   :config
-  ;;   (lsp-enable-which-key-integration t))
-
-  ;; (use-package lsp-ui
-  ;;   :ensure t
-  ;;   :hook (lsp-mode . lsp-ui-mode)
-  ;;   :custom
-  ;;   (lsp-ui-doc-position 'bottom))
-
-  ;; (use-package lsp-treemacs
-  ;;   :ensure t
-  ;;   :after lsp)
-
-  ;; (use-package company
-  ;;   :ensure t
-  ;;   :after lsp-mode
-  ;;   :hook (lsp-mode . company-mode)
-  ;;   :bind (:map company-active-map
-  ;; 	      ("<tab>" . company-complete-selection))
-  ;;   (:map lsp-mode-map
-  ;; 	("<tab>" . company-indent-or-complete-common))
-  ;;   :custom
-  ;;   (company-minimum-prefix-length 1)
-  ;;   (company-idle-delay 0.0))
-
-  ;; (use-package company-box
-  ;;   :ensure t
-  ;;   :hook (company-mode . company-box-mode))
-
-#+end_src
-
-* flycheck
-#+begin_src elisp
-  ;; (use-package flycheck
-  ;;   :ensure t
-  ;;   :init (global-flycheck-mode))
 #+end_src
 
 * which-key
@@ -421,20 +238,6 @@
     :ensure t)
   (when (memq window-system '(mac ns x))    
     (exec-path-from-shell-initialize))
-#+end_src
-
-* eaf
-#+begin_src elisp
-  ;; (use-package eaf
-  ;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-  ;;   :custom
-  ;; 					; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-  ;;   (eaf-browser-continue-where-left-off t)
-  ;;   (eaf-browser-enable-adblocker t)
-  ;;   (browse-url-browser-function 'eaf-open-browser)
-  ;;   :config
-  ;;   (defalias 'browse-web #'eaf-open-browser)) ;; unbind, see more in the Wiki
-  ;; (require 'eaf-browser)
 #+end_src
 
 * vterm
@@ -557,7 +360,6 @@
   (setq kill-buffer-query-functions nil)
 
 #+end_src
-
 
 * treesitter
 #+begin_src elisp
