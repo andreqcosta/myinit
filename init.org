@@ -124,6 +124,15 @@
 
 * emacs
 #+begin_src elisp
+  (xterm-mouse-mode 1)
+#+end_src
+
+#+begin_src elisp
+  (delete-selection-mode t)
+
+#+end_src
+
+#+begin_src elisp
   (global-visual-line-mode t)
 #+end_src
 
@@ -223,14 +232,14 @@
 #+end_src
 * company
 #+begin_src elisp
-  (use-package company
-    :ensure t
-    :bind (:map company-active-map
-  	      ("<tab>" . company-complete-selection))
+  ;; (use-package company
+  ;;   :ensure t
+  ;;   :bind (:map company-active-map
+  ;; 	      ("<tab>" . company-complete-selection))
 
-    :custom
-    (company-minimum-prefix-length 1)
-    (company-idle-delay 0.0))
+  ;;   :custom
+  ;;   (company-minimum-prefix-length 1)
+  ;;   (company-idle-delay 0.0))
 #+end_src
 
 * which-key
@@ -314,6 +323,7 @@
     (indent-region (point-min) (point-max)))
 
   (global-set-key (kbd "C-<tab>") 'indent-all)
+  (global-set-key (kbd "C-c i") 'indent-all)
 #+end_src
 
 

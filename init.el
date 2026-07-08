@@ -102,6 +102,10 @@
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
+(xterm-mouse-mode 1)
+
+(delete-selection-mode t)
+
 (global-visual-line-mode t)
 
 (setq-default left-margin-width 1 right-margin-width 1) ; Define new widths.
@@ -128,11 +132,12 @@
 
 (defun cp-line()
   (interactive)
-  (beginning-of-line)
-  (set-mark-command t)
-  (end-of-line)
-  (kill-ring-save region-beginning region-end)
-  )
+  (beginning-of-line 1)
+  (set-mark-command nil)
+  (end-of-line 1)
+  (kill-ring-save (region-beginning) (region-end)))
+
+(global-set-key (kbd "C-c w") 'cp-line)
 
 (use-package spacemacs-theme
   :ensure t
@@ -172,14 +177,14 @@
 (use-package magit-popup
   :ensure t)
 
-(use-package company
-  :ensure t
-  :bind (:map company-active-map
-	      ("<tab>" . company-complete-selection))
+;; (use-package company
+;;   :ensure t
+;;   :bind (:map company-active-map
+;; 	      ("<tab>" . company-complete-selection))
 
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
+;;   :custom
+;;   (company-minimum-prefix-length 1)
+;;   (company-idle-delay 0.0))
 
 (use-package which-key
   :ensure t
@@ -242,6 +247,7 @@ A single-digit prefix argument gives the top window arg*10%."
   (indent-region (point-min) (point-max)))
 
 (global-set-key (kbd "C-<tab>") 'indent-all)
+(global-set-key (kbd "C-c i") 'indent-all)
 
 (defun cut-paste-in-nextline ()
   (interactive)
