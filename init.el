@@ -1,7 +1,7 @@
 ;; Package repositories
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/") t)
+  	     '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -43,16 +43,16 @@
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
-		  (replace-regexp-in-string
-		   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-		   crm-separator)
-		  (car args))
-	  (cdr args)))
+  		  (replace-regexp-in-string
+  		   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+  		   crm-separator)
+  		  (car args))
+  	  (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
-	'(read-only t cursor-intangible t face minibuffer-prompt))
+  	'(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
   ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
@@ -70,9 +70,9 @@
   :ensure nil
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
-	      ("RET" . vertico-directory-enter)
-	      ("DEL" . vertico-directory-delete-char)
-	      ("M-DEL" . vertico-directory-delete-word))
+  	      ("RET" . vertico-directory-enter)
+  	      ("DEL" . vertico-directory-delete-char)
+  	      ("M-DEL" . vertico-directory-delete-word))
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
@@ -84,16 +84,16 @@
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
   (setq completion-styles '(orderless basic)
-	completion-category-defaults nil
-	completion-category-overrides '((file (styles partial-completion)))))
+  	completion-category-defaults nil
+  	completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   :ensure t
   ;; Either bind `marginalia-cycle' globally or only in the minibuffer
   :bind (("M-A" . marginalia-cycle)
-	 :map minibuffer-local-map
-	 ("M-A" . marginalia-cycle))
+  	 :map minibuffer-local-map
+  	 ("M-A" . marginalia-cycle))
 
   ;; The :init configuration is always executed (Not lazy!)
   :init
@@ -101,6 +101,18 @@
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(defun my/execute-current-line-in-shell ()
+  "Execute the current line as a shell command."
+  (interactive)
+  (let ((command (buffer-substring-no-properties 
+                  (line-beginning-position) 
+                  (line-end-position))))
+    (shell-command command)))
+
+(global-set-key (kbd "C-c e") 'my/execute-current-line-in-shell)
 
 (xterm-mouse-mode 1)
 
@@ -112,11 +124,11 @@
 (set-window-buffer nil (current-buffer))
 
 (dolist (mode '(org-mode-hook
-		term-mode-hook
-		vterm-mode-hook
-		shell-mode-hook
-		treemacs-mode-hook
-		eshell-mode-hook))
+  		term-mode-hook
+  		vterm-mode-hook
+  		shell-mode-hook
+  		treemacs-mode-hook
+  		eshell-mode-hook))
   (add-hook mode (lambda() (display-line-numbers-mode 0))))
 
 (functionp 'module-load)
@@ -138,6 +150,18 @@
   (kill-ring-save (region-beginning) (region-end)))
 
 (global-set-key (kbd "C-c w") 'cp-line)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((C . t)
+   (shell . t)
+   (python . t)
+   (emacs-lisp .nil)))
+
+(setq org-confirm-babel-evaluate nil)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
+(setq python-indent-offset 4)
 
 (use-package spacemacs-theme
   :ensure t
@@ -177,15 +201,6 @@
 (use-package magit-popup
   :ensure t)
 
-;; (use-package company
-;;   :ensure t
-;;   :bind (:map company-active-map
-;; 	      ("<tab>" . company-complete-selection))
-
-;;   :custom
-;;   (company-minimum-prefix-length 1)
-;;   (company-idle-delay 0.0))
-
 (use-package which-key
   :ensure t
   :config
@@ -195,39 +210,6 @@
   :ensure t)
 (when (memq window-system '(mac ns x))    
   (exec-path-from-shell-initialize))
-
-(use-package vterm
-  :ensure t
-  :bind (:map vterm-mode-map
-	      ("C-o" . other-window))
-  :init
-  (setq vterm-buffer-name-string "vterm %s"))
-
-;; (use-package multi-vterm
-;;   :ensure t)
-
-(defun mvterm-below (&optional arg)
-  "Split the current window 70/30 rather than 50/50.
-A single-digit prefix argument gives the top window arg*10%."
-  (interactive "P")
-  (let ((proportion (* (or arg 7.5) 0.1)))
-
-    (split-window-below (round (* proportion (window-height)))))
-  (other-window 1)
-  (vterm))
-(global-set-key (kbd "C-c v") 'mvterm-below)
-(global-set-key (kbd "C-c t") 'vterm)
-
-
-(defun mvterm-left ()
-  (interactive)
-  (split-window-right)
-  (other-window 1)
-  (vterm))
-
-(global-set-key (kbd "C-c b") 'mvterm-left)
-(global-set-key (kbd "C-c j") 'multi-vterm-next)
-(global-set-key (kbd "C-c k") 'multi-vterm-prev)
 
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 
@@ -263,7 +245,7 @@ A single-digit prefix argument gives the top window arg*10%."
   :init
   (projectile-mode +1)
   :bind (:map projectile-mode-map
-	      ("C-c p" . projectile-command-map)))
+  	      ("C-c p" . projectile-command-map)))
 
 (use-package web-mode
   :ensure t)

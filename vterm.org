@@ -1,0 +1,37 @@
+* vterm
+#+begin_src elisp
+(use-package vterm
+  :ensure t
+  :bind (:map vterm-mode-map
+  	      ("C-o" . other-window))
+  :init
+  (setq vterm-buffer-name-string "vterm %s"))
+
+;; (use-package multi-vterm
+;;   :ensure t) 
+#+end_src
+
+#+begin_src elisp
+(defun mvterm-below (&optional arg)
+  "Split the current window 70/30 rather than 50/50.
+  A single-digit prefix argument gives the top window arg*10%."
+  (interactive "P")
+  (let ((proportion (* (or arg 7.5) 0.1)))
+
+    (split-window-below (round (* proportion (window-height)))))
+  (other-window 1)
+  (vterm))
+(global-set-key (kbd "C-c v") 'mvterm-below)
+(global-set-key (kbd "C-c t") 'vterm)
+
+
+(defun mvterm-left ()
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (vterm))
+
+(global-set-key (kbd "C-c b") 'mvterm-left)
+(global-set-key (kbd "C-c j") 'multi-vterm-next)
+(global-set-key (kbd "C-c k") 'multi-vterm-prev)
+#+end_src
