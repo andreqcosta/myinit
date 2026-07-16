@@ -261,6 +261,11 @@
   :ensure t)
 (use-package magit-popup
   :ensure t)
+
+(setq magit-auto-revert-mode t)
+
+(global-set-key (kbd "C-x g") 'magit)
+
 #+end_src
 * which-key
 #+begin_src elisp
